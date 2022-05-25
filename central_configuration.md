@@ -77,3 +77,7 @@ spring:
 São as responsaveis por definir onde o Spring deve buscar a configuração.
 
 Ainda existe a possibilidade de registrar o Server Config no Eureka e quando o cliente for buscar as confugurações ele consulta o Eureka e então com a respota se conecta ao Server Config.
+
+
+
+[1] - https://docs.spring.io/spring-cloud-config/docs/current/reference/html/#config-first-bootstrap
