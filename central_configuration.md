@@ -24,7 +24,7 @@ No pom.xml deve ser inserido essa dependencia.
 ```
 No https://start.spring.io/ esta como Config Client.
 
-E no application.yml colocar a seguinte conteúdo:
+E no application.yml colocar o seguinte conteúdo:
 
 ```yml
 server:
@@ -39,12 +39,13 @@ spring:
       profile: dev
 ```
 Primeiro eu defino a porta da aplicação, no caso '8071', depois nomeio a aplicação como 'cliente', isso é usado para se 
-registrar no Eureka e também define o nome do arquivo que vai ser buscado no config server. Depois configuramos 
-onde deve ser importado as configurações 'optional:configserver:http://localhost:8888', o 'optional' torna essa 
-configuração opcional, caso não consiga realizar essa configuração a aplicação vai subir sem carregar essa informação. 
+registrar no Eureka e também define o nome do arquivo que vai ser buscado no config server.
+Depois configuramos onde deve ser importado as configurações 'optional:configserver:http://localhost:8888', o 'optional' 
+torna essa configuração opcional, caso não consiga realizar essa configuração a aplicação vai subir sem carregar essa informação. 
 Por fim podemos definir o profile, no caso devinimos como 'dev', desta forma ele vai buscar um arquivo nomeado da seguinte 
 forma 'cliente-dev.yml', se ele não encontrar esse profile, vai usar o default 'cliente.yml', o mesmo ocorre se não for 
-definido essa propriedade. Seguindo essa linha, se o Spring não achar um arquivo que corresponda ao name passado, vai 
+definido essa propriedade.
+Seguindo essa linha, se o Spring não achar um arquivo que corresponda ao name passado, vai 
 buscar a configuração default, que no caso seria um arquico nomeado como 'application.yml'.
 
 
