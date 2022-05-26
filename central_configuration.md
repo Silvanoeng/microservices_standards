@@ -5,6 +5,51 @@ Pode ser guardadas as configurações dos diferentes ambiente (desenvolvimento, 
 
 
 ## Cliente config
+
+Depois de pesquisar sobre o assunto, descobri que havia um tempo onde era necessario criar um arquivo bootstrap.yml, quando as configurações 
+que desejamos importar tinham relação com o banco de dados que vamos conectar, esse arquivo seria processado antes do aplication.yml.
+Porem isso já foi superado, por esse motivo vou descrever três maneiras de configuração, para poder ajudar pessoas quem possam encontrar 
+configurações com o bootstrap.yml.
+
+
+### Primeira forma (+ atual, kkk)
+
+No pom.xml deve ser inserido essa dependencia.
+
+```xml
+<dependency>
+			<groupId>org.springframework.cloud</groupId>
+			<artifactId>spring-cloud-starter-config</artifactId>
+</dependency>
+```
+No https://start.spring.io/ esta como Config Client.
+
+E no application.yml colocar a seguinte conteúdo:
+
+```yml
+server:
+  port: 8071
+spring:
+  application:
+    name: cliente
+  config:
+    import: optional:configserver:http://localhost:8888
+  cloud:
+    config:
+      profile: dev
+```
+Primeiro eu defino a porta da aplicação, no caso '8071', depois nomeio a aplicação como 'cliente', isso é usado para se 
+registrar no Eureka e também define o nome do arquivo que vai ser buscado no config server. Depois configuramos 
+onde deve ser importado as configurações 'optional:configserver:http://localhost:8888', o 'optional' torna essa 
+configuração opcional, caso não consiga realizar essa configuração a aplicação vai subir sem carregar essa informação. 
+Por fim podemos definir o profile, no caso devinimos como 'dev', desta forma ele vai buscar um arquivo nomeado da seguinte 
+forma 'cliente-dev.yml', se ele não encontrar esse profile, vai usar o default 'cliente.yml', o mesmo ocorre se não for 
+definido essa propriedade. Seguindo essa linha, se o Spring não achar um arquivo que corresponda ao name passado, vai 
+buscar a configuração default, que no caso seria um arquico nomeado como 'application.yml'.
+
+
+### Segunda forma (- atual, kkk)
+
 No pom.xml deve ser inserido duas dependencias.
 A primeira seria para definir que a aplicação deve iniciar pelo arquivo bootstrap.yml, 
 inserindo essa dependencia se torna dispensavel criar o arquivo, caso seu server config 
@@ -41,40 +86,7 @@ A segunda dependencia é do config client.
 </dependency>
 ```
 
-
-Outra abordagem seria colocando apenas a dependencia:
-
-```xml
-<dependency>
-			<groupId>org.springframework.cloud</groupId>
-			<artifactId>spring-cloud-starter-config</artifactId>
-</dependency>
-```
-E no application.yml colocar a seguinte conteúdo:
-
-```yml
-server:
-  port: 8071
-spring:
-  config:
-    import: optional:configserver:http://localhost:8888
-  application:
-    name: 'cliente'
-    profiles:
-      active: defaulf
-
-eureka:
-  client:
-    service-url:
-      defaultZone: http://localhost:8761/eureka
-```
-Onde as seguinte linhas
-```yml
-spring:
-  config:
-    import: optional:configserver:http://localhost:8888
-```
-São as responsaveis por definir onde o Spring deve buscar a configuração.
+### Terceira forma
 
 Ainda existe a possibilidade de registrar o Server Config no Eureka e quando o cliente for buscar as confugurações ele consulta o Eureka e então com a respota se conecta ao Server Config.
 
